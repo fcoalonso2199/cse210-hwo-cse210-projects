@@ -1,3 +1,10 @@
+// Author: Francisco Javier Alonso Gonzalez
+// Date: 2024-06-17
+// Title: Journal Program
+
+//In the Line 31 i added `int.TryParse()` to dont let the user
+//write invalid characters and crash the program
+
 using System;
 using System.Collections.Generic;
 

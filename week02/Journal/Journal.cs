@@ -1,3 +1,7 @@
+//For exceed the minimun requirements i added in the line 39 the `_entries.Clear()`
+//that helps to evoid duplicate entries when load the journal from a file.
+
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +34,6 @@ public class Journal
         }
         Console.WriteLine("Journal saved successfully.");
     }
-
     public void LoadFromFile(string file)
     {
         _entries.Clear(); 
