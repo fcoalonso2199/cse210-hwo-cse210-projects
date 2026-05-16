@@ -1,5 +1,5 @@
 //For exceed the minimun requirements i added in the line 39 the `_entries.Clear()`
-//that helps to evoid duplicate entries when load the journal from a file.
+//that helps to evoid duplicate entries when load the journal from a file
 
 
 using System;
