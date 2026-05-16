@@ -1,5 +1,5 @@
 // Author: Francisco Javier Alonso Gonzalez
-// Date: 2024-06-17
+// Date: 2026-05-15
 // Title: Journal Program
 
 //In the Line 31 i added `int.TryParse()` to dont let the user
