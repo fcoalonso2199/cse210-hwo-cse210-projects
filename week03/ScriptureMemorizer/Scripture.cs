@@ -11,7 +11,6 @@ public class Scripture
     {
         _reference = reference;
         _words = new List<Word>();
-        
         string[] splitWords = text.Split(' ');
         foreach (var word in splitWords)
         {
@@ -23,7 +22,7 @@ public class Scripture
     {
         Random random = new Random();
         
-        // Filtra para elegir SOLO palabras que no se han ocultado todavía
+        // Advanced Requirement: Filter to select ONLY words that are not already hidden
         List<Word> visibleWords = _words.Where(w => !w.IsHidden()).ToList();
 
         int wordsToHide = Math.Min(numberToHide, visibleWords.Count);
@@ -43,7 +42,6 @@ public class Scripture
         {
             textWords.Add(word.GetDisplayText());
         }
-
         return $"{_reference.GetDisplayText()} - {string.Join(" ", textWords)}";
     }
 

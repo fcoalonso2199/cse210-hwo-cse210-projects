@@ -25,7 +25,6 @@ public class Word
     {
         if (_isHidden)
         {
-            // Crea una cadena de guiones bajos con el mismo largo de la palabra
             return new string('_', _text.Length);
         }
         return _text;

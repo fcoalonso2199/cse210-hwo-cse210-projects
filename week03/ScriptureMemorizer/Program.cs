@@ -4,16 +4,6 @@ using System.Collections.Generic;
 
 class Program
 {
-    /* 
-     * INFORME DE CREATIVIDAD Y REQUISITOS SUPERADOS:
-     * 1. Selección Inteligente de Palabras: El método Scripture.HideRandomWords() filtra dinámicamente las 
-     *    palabras para elegir únicamente aquellas que NO han sido ocultas previamente. Esto garantiza una 
-     *    progresión limpia sin re-seleccionar espacios vacíos.
-     * 2. Biblioteca de Pasajes Externa (Persistencia de Archivos): El programa busca un archivo llamado 'passages.txt'.
-     *    Si existe, lee los versículos desde allí. Si no existe, genera un archivo automático con pasajes por defecto.
-     *    Esto permite al usuario expandir su biblioteca de memorización sin tener que modificar el código fuente.
-     */
-
     static void Main(string[] args)
     {
         string filePath = "passages.txt";
@@ -23,19 +13,70 @@ class Program
         
         if (library.Count == 0)
         {
-            Console.WriteLine("Error: Bible passages could not be loaded. Please ensure 'passages.txt' exists and is properly formatted.");
+            Console.WriteLine("Error: Could not load scripture passages from the file.");
             return;
         }
 
-        // Selecciona un pasaje al azar de la biblioteca cargada
-        Random rand = new Random();
-        Scripture scripture = library[rand.Next(library.Count)];
+        Scripture scripture = null;
+        bool validSelection = false;
 
+        while (!validSelection)
+        {
+            Console.Clear();
+            Console.WriteLine("=================================================================");
+            Console.WriteLine("                   SCRIPTURE MEMORIZER PROGRAM                   ");
+            Console.WriteLine("=================================================================\n");
+            Console.WriteLine("Select the passage you want to memorize:\n");
+
+            // Print choices loaded from the file
+            for (int i = 0; i < library.Count; i++)
+            {
+                string textSample = library[i].GetDisplayText().Split('-')[0].Trim();
+                Console.WriteLine($" [{i + 1}] {textSample}");
+            }
+            Console.WriteLine($" [{library.Count + 1}] Select a random verse");
+            Console.WriteLine(" [0] Exit program");
+            
+            Console.Write("\nEnter your choice: ");
+            string choiceInput = Console.ReadLine();
+
+            if (int.TryParse(choiceInput, out int choice))
+            {
+                if (choice == 0)
+                {
+                    Console.WriteLine("\nGoodbye!");
+                    return;
+                }
+                else if (choice > 0 && choice <= library.Count)
+                {
+                    scripture = library[choice - 1];
+                    validSelection = true;
+                }
+                else if (choice == library.Count + 1)
+                {
+                    Random rand = new Random();
+                    scripture = library[rand.Next(library.Count)];
+                    validSelection = true;
+                }
+                else
+                {
+                    Console.WriteLine("\nInvalid option. Press any key to try again...");
+                    Console.ReadKey();
+                }
+            }
+            else
+            {
+                Console.WriteLine("\nPlease enter a valid number. Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
+
+        // --- MAIN MEMORIZATION LOOP ---
         while (true)
         {
             Console.Clear();
             Console.WriteLine("=================================================================");
-            Console.WriteLine("                    Scripture Memorizer                          ");                 
+            Console.WriteLine("                    SCRIPTURE MEMORIZER                          ");
             Console.WriteLine("=================================================================\n");
             
             Console.WriteLine(scripture.GetDisplayText());
@@ -43,23 +84,21 @@ class Program
 
             if (scripture.IsCompletelyHidden())
             {
-                Console.WriteLine("\nCongratulations! You have completed the scripture memorization.");
+                Console.WriteLine("\nCongratulations! You have completed the passage from memory.");
                 break;
             }
 
-            Console.WriteLine("\nPress ENTER to hide words or type 'exit' to finish:");
+            Console.WriteLine("\nPress ENTER to hide words or type 'quit' to finish:");
             string input = Console.ReadLine();
 
-            if (input.Trim().ToLower() == "exit")
+            if (input.Trim().ToLower() == "quit")
             {
                 break;
             }
-
-            // Oculta 3 palabras en cada turno
             scripture.HideRandomWords(3);
         }
 
-        Console.WriteLine("\nThanks for using the Scripture Memorizer. See you later!");
+        Console.WriteLine("\nThank you for using the Scripture Memorizer. Goodbye!");
     }
 
     private static void EnsureDefaultLibraryExists(string filePath)
@@ -67,15 +106,16 @@ class Program
         if (!File.Exists(filePath))
         {
             string[] defaultPassages = {
-                "John|3|16||For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.",
-                "Proverbs|3|5|6|Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.",
-                "Philippians|4|13||I can do all this through him who gives me strength.",
-                "Psalm|23|1|3|The Lord is my shepherd, I lack nothing. I make you lie down in green pastures, you restore my soul."
+                "Proverbs|3|5|6|Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths.",
+                "John|3|16||For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.",
+                "Psalms|23|1|3|The LORD is my shepherd; I shall not want. He maketh me to lie down in green pastures: he leadeth me beside the still waters. He restoreth my soul.",
+                "1 Nephi|3|7||And it came to pass that I, Nephi, said unto my father: I will go and do the things which the Lord hath commanded, for I know that the Lord giveth no commandments unto the children of men, save he shall prepare a way for them that they may accomplish the thing which he commandeth them.",
+                "Alma|32|21||And now as I said concerning faith—faith is not to have a perfect knowledge of things; therefore if ye have faith ye hope for things which are not seen, which are true.",
+                "Moroni|10|4|5|And when ye shall receive these things, I would exhort you that ye would ask God, the Eternal Father, in the name of Christ, if these things are not true; and if ye shall ask with a sincere heart, with real intent, having faith in Christ, he will manifest the truth of it unto you, by the power of the Holy Ghost. And by the power of the Holy Ghost ye may know the truth of all things."
             };
             File.WriteAllLines(filePath, defaultPassages);
         }
     }
-
     private static List<Scripture> LoadLibraryFromFile(string filePath)
     {
         List<Scripture> library = new List<Scripture>();
@@ -112,7 +152,7 @@ class Program
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error reading library file: {ex.Message}");
+            Console.WriteLine($"Error reading the library file: {ex.Message}");
         }
 
         return library;
