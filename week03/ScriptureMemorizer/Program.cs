@@ -1,3 +1,11 @@
+/// Author: Francisco Javier Alonso Gonzalez
+/// Date: 22-May-2025
+/// Title: Scripture Memorizer Program
+/// Exceed Requirements:
+/// - Added a feature to load scripture passages from an external text file, allowing for easy updates and customization of the library without modifying the code.
+/// - Added an option for the user to select the passage they want to memorize from a list of available passages, enhancing user engagement and personalization of the memorization experience.
+
+
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -71,7 +79,6 @@ class Program
             }
         }
 
-        // --- MAIN MEMORIZATION LOOP ---
         while (true)
         {
             Console.Clear();
