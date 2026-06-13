@@ -1,0 +1,2 @@
+100
+SimpleGoal|Eat|chiken|10|True
