@@ -1,8 +1,15 @@
+///Author: Francisco Javier Alonso Gonzalez
+/// Title: Eternal Quest
+/// Date: 13/06/2026
+/// Exceed requirements:
+/// The user can delete goals and optionally subtract their earned points from the total score.
+/// The user can reset the progress of a goal and optionally subtract its earned points from the total score.
+/// The user cant input validation for all menu options and numeric inputs. 
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-// --- Base Class ---
 public abstract class Goal {
     protected string _name;
     protected string _description;
@@ -50,8 +57,6 @@ public abstract class Goal {
         }
     }
 }
-
-// --- Simple Goal ---
 public class SimpleGoal : Goal {
     private bool _complete;
 
@@ -86,8 +91,6 @@ public class SimpleGoal : Goal {
         return base.Serialize() + $"|{_complete}";
     }
 }
-
-// --- Eternal Goal ---
 public class EternalGoal : Goal {
     private int _timesRecorded;
 
@@ -119,8 +122,6 @@ public class EternalGoal : Goal {
         return base.Serialize() + $"|{_timesRecorded}";
     }
 }
-
-// --- Checklist Goal ---
 public class ChecklistGoal : Goal {
     private int _targetCount;
     private int _currentCount;
@@ -161,8 +162,6 @@ public class ChecklistGoal : Goal {
         return base.Serialize() + $"|{_targetCount}|{_currentCount}|{_bonus}";
     }
 }
-
-// --- Main Program ---
 class Program {
     private static List<Goal> _goals = new List<Goal>();
     private static int _totalScore = 0;
@@ -210,7 +209,7 @@ class Program {
             Console.WriteLine("\nWhat type of goal do you want to create? (1. Simple, 2. Eternal, 3. Checklist)");
             type = Console.ReadLine()?.Trim();
             if (type != "1" && type != "2" && type != "3") {
-                Console.WriteLine("⚠️ Invalid option. Please select 1, 2 or 3.");
+                Console.WriteLine(" Invalid option. Please select 1, 2 or 3.");
             }
         } while (type != "1" && type != "2" && type != "3");
 
@@ -287,8 +286,8 @@ class Program {
         Console.WriteLine("Goal deleted successfully.");
     }
     private static void ResetAll() {
-         _goals.Clear();        // elimina todas las metas
-         _totalScore = 0;       // reinicia el puntaje
+         _goals.Clear();        
+         _totalScore = 0;       
              Console.WriteLine("All goals and score have been reset to 0.");
         }
 
@@ -349,13 +348,12 @@ class Program {
         }
     }
 
-    // --- Helper input methods ---
     private static int ReadNonNegativeInt(string prompt) {
         int value;
         while (true) {
             Console.Write(prompt);
             if (int.TryParse(Console.ReadLine(), out value) && value >= 0) return value;
-            Console.WriteLine("⚠️ Invalid number. Enter a non-negative integer.");
+            Console.WriteLine(" Invalid number. Enter a non-negative integer.");
         }
     }
 
@@ -364,7 +362,7 @@ class Program {
         while (true) {
             Console.Write(prompt);
             if (int.TryParse(Console.ReadLine(), out value) && value > 0) return value;
-            Console.WriteLine("⚠️ Invalid number. Enter a positive integer.");
+            Console.WriteLine(" Invalid number. Enter a positive integer.");
         }
     }
 
@@ -373,15 +371,8 @@ class Program {
         while (true) {
             Console.Write(prompt);
             if (int.TryParse(Console.ReadLine(), out idx) && idx >= 1 && idx <= max) return idx;
-            Console.WriteLine($"⚠️ Invalid number. Enter a number between 1 and {max}.");
+            Console.WriteLine($" Invalid number. Enter a number between 1 and {max}.");
         }
     }
 }
 
-/*
-Notes:
-- Menu options are validated and consistent.
-- Delete and Reset options allow optional subtraction of previously earned points.
-- All numeric inputs are validated.
-- Save/load persists total score and each goal's internal state.
-*/
